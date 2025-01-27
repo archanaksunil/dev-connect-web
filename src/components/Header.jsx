@@ -7,7 +7,7 @@ const Header = ({ openModal }) => {
   return (
     <div className="navbar bg-neutral">
       <div className="flex-1">
-        <Link path="/" className="btn btn-ghost text-xl">
+        <Link to="/" className="btn btn-ghost text-xl">
           👩🏻‍💻 Dev Connect
         </Link>
       </div>
@@ -31,6 +31,16 @@ const Header = ({ openModal }) => {
               <li>
                 <Link to="/profile" className="justify-between">
                   Profile
+                </Link>
+              </li>
+              <li>
+                <Link to="/connection" className="justify-between">
+                  Connections
+                </Link>
+              </li>
+              <li>
+                <Link to="/request" className="justify-between">
+                  Requests
                 </Link>
               </li>
               <li>
