@@ -6,9 +6,12 @@ import { addUser } from "../utils/userSlice";
 import { BASE_URL } from "../utils/constants";
 
 const Login = () => {
-  const [email, setEmail] = useState("luffy@gmail.com");
-  const [password, setPassword] = useState("Luffy@123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
+  const [isLogin, setIsLogin] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -28,6 +31,26 @@ const Login = () => {
       setError(err.response.data);
     }
   };
+
+  const handleSignup = async () => {
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/signup`,
+        {
+          email,
+          password,
+          firstName,
+          lastName,
+        },
+        { withCredentials: true }
+      );
+      dispatch(addUser(res.data));
+      navigate("/profile");
+    } catch (err) {
+      setError(err.response.data);
+    }
+  };
+
   return (
     <div className="hero bg-base-200 min-h-screen">
       <div className="hero-content flex-col lg:flex-row-reverse">
@@ -42,6 +65,34 @@ const Login = () => {
         </div>
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
           <form className="card-body">
+            {!isLogin && (
+              <>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">First Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered"
+                    required
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Last Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered"
+                    required
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                </div>
+              </>
+            )}
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Email</span>
@@ -77,11 +128,19 @@ const Login = () => {
                 className="btn btn-primary"
                 onClick={(e) => {
                   e.preventDefault();
-                  handleLogin();
+                  isLogin ? handleLogin() : handleSignup();
                 }}
               >
-                Login
+                {isLogin ? "Login" : "Sign Up"}
               </button>
+              <p
+                className="my-5 text-center text-blue-500 underline cursor-pointer"
+                onClick={() => setIsLogin((val) => !val)}
+              >
+                {isLogin
+                  ? "New User? Sign up here"
+                  : "Existing User? Login here"}
+              </p>
             </div>
           </form>
         </div>
